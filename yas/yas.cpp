@@ -51,7 +51,7 @@ class YasArchiver : public ISerializerTest {
 public:
 
     Buf serialize(const std::vector<MyTypes::Monster> &data) override {
-        yas::mem_ostream os;
+        yas::mem_ostream os(_buf.data.get(), _buf.size);
         yas::binary_oarchive<yas::mem_ostream, yas::binary | yas::no_header> oa(os);
         oa & data;
         if (_buf.size == 0)
