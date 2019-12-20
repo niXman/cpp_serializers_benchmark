@@ -52,17 +52,15 @@ class YasArchiverCompression : public ISerializerTest {
 public:
 
     Buf serialize(const std::vector<MyTypes::Monster> &data) override {
-        yas::mem_ostream os(_buf.data.get(), _buf.size);
+        yas::mem_ostream os(std::move(_buf));
         yas::binary_oarchive<yas::mem_ostream, yas::binary | yas::no_header | yas::compacted> oa(os);
         oa & data;
-        if (_buf.size == 0)
-            _buf = os.get_shared_buffer();
+        _buf = os.get_shared_buffer();
 
         return {reinterpret_cast<const uint8_t *>(_buf.data.get()), _buf.size};
     }
 
     void deserialize(Buf buf, std::vector<MyTypes::Monster> &resVec) override {
-
         yas::mem_istream is(buf.ptr, buf.bytesCount);
         yas::binary_iarchive<yas::mem_istream, yas::binary | yas::no_header | yas::compacted> ia(is);
 

@@ -55,7 +55,7 @@ class YasArchiverSStream : public ISerializerTest {
 public:
 
     Buf serialize(const std::vector<MyTypes::Monster> &data) override {
-        std::stringstream ss;
+        std::ostringstream ss;
         yas::std_ostream_adapter os{ss};
         yas::binary_oarchive<yas::std_ostream_adapter, yas::binary | yas::no_header> oa(os);
         oa & data;
@@ -69,7 +69,7 @@ public:
     }
 
     void deserialize(Buf buf, std::vector<MyTypes::Monster> &resVec) override {
-        std::stringstream ss{_buf};
+        std::istringstream ss{_buf};
         yas::std_istream_adapter is(ss);
         yas::binary_iarchive<yas::std_istream_adapter, yas::binary | yas::no_header> ia(is);
 
